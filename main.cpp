@@ -1,6 +1,6 @@
-
 #include <iostream>
 using namespace std;
+
 
 
 struct User {
@@ -24,7 +24,51 @@ User* users = NULL;
 Tickets* front = NULL;
 Tickets* rear = NULL;
 
+
+
+Tickets** resolvedTickets = new Tickets*[10];
+int resolvedSize = 10;
+int resolvedCount = 0;
+
+
+
+
+
+
+
+
+
+
+void resolve() {
+    if (front == NULL) {
+        cout << "No tickets to resolve." << endl;
+        return;
+    }
+
+    Tickets* current = front;
+    front = front->next;
+
+    current->status = "resolved";
+    current->next = NULL;
+
+    if (resolvedCount == resolvedSize) {
+        Tickets** newArray = new Tickets*[resolvedSize * 2];
+        for (int i = 0; i < resolvedSize; i++) {
+            newArray[i] = resolvedTickets[i];
+        }
+        delete[] resolvedTickets;
+        resolvedTickets = newArray;
+        resolvedSize *= 2;
+    }
+
+    resolvedTickets[resolvedCount++] = current;
+
+    cout << current->ID <<"Ticket resolved and added to resolved list." << endl;
+}
+
+
 void AddTicket () { 
+    
     Tickets* newTicket = new Tickets;
     cout << "Enter the issue description: ";
     cin >> newTicket->issue;    
@@ -35,7 +79,6 @@ void AddTicket () {
     newTicket->status = "open";
     newTicket->next = NULL;
 
-
     if (front == NULL) {
         front= rear = newTicket;
     } else {
@@ -44,6 +87,7 @@ void AddTicket () {
             rear = rear->next;
         }
         rear->next = newTicket;
+        rear = newTicket;
     }
 
 
@@ -81,6 +125,9 @@ void ShowTickets () {
         }
              
 }
+
+
+
 
 void registration () {
      
@@ -128,19 +175,12 @@ void Show () {
 }
 
 
-int main() {
-     
+int main() {     
     registration();
     Show();
     AddTicket();
     AddTicket();
+    resolve();
     ShowTickets();
-   
-  
-     
-
-   
-    
-
     return 0;
 }
