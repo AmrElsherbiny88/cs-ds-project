@@ -9,10 +9,78 @@ struct User {
     User* next;
 };
 
+
+struct Tickets {
+    string issue;
+    int ID;
+    int userID;
+    string status;
+    Tickets* next;
+};
+
 User* users = NULL; 
 
 
+Tickets* front = NULL;
+Tickets* rear = NULL;
 
+void AddTicket () { 
+    Tickets* newTicket = new Tickets;
+    cout << "Enter the issue description: ";
+    cin >> newTicket->issue;    
+    cout << "Enter the Ticket ID: ";
+    cin >> newTicket->ID;  
+    cout << "Enter the user ID: ";
+    cin >> newTicket->userID;  
+    newTicket->status = "open";
+    newTicket->next = NULL;
+
+
+    if (front == NULL) {
+        front= rear = newTicket;
+    } else {
+   
+        while (rear->next != NULL) {
+            rear = rear->next;
+        }
+        rear->next = newTicket;
+    }
+
+
+
+    cout << "Ticket added successfully." << endl;
+}
+
+
+
+void ShowTickets () { 
+        Tickets* current = front ; 
+    
+        if (current == NULL) {
+            cout << "No tickets available." << endl;
+            return;
+        }
+    
+    
+        while (current->next != NULL) {
+
+            if (current->status == "open")
+            {
+                cout << current->issue << " " << current->ID << " " << current->userID << " " << current->status << endl;
+                current = current->next;
+            }else{
+                current = current->next;
+            }
+            
+        
+        }
+
+        if (current->status == "open")
+        {
+            cout << current->issue << " " << current->ID << " " << current->userID << " " << current->status << endl;
+        }
+             
+}
 
 void registration () {
      
@@ -63,8 +131,12 @@ void Show () {
 int main() {
      
     registration();
-    registration();
     Show();
+    AddTicket();
+    AddTicket();
+    ShowTickets();
+   
+  
      
 
    
